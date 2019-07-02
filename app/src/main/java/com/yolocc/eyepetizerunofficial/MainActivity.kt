@@ -6,6 +6,7 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
 import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -17,19 +18,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.navigation_home -> {
                 toolbar.title = getString(R.string.title_home)
+                loadFragment(homeFragment)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {
+            R.id.navigation_discover -> {
                 toolbar.title = getString(R.string.title_discover)
+                loadFragment(discoverFragment)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_notifications -> {
+            R.id.navigation_ranking -> {
                 toolbar.title = getString(R.string.title_ranking)
+                loadFragment(rankingFragment)
                 return@OnNavigationItemSelectedListener true
             }
         }
         false
     }
+
+    private lateinit var discoverFragment: DiscoverFragment
+    private lateinit var rankingFragment: RankingFragment
+    private lateinit var homeFragment: HomeFragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +57,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         navView.setNavigationItemSelectedListener(this)
+        homeFragment = HomeFragment.newInstance()
+        discoverFragment = DiscoverFragment.newInstance()
+        rankingFragment = RankingFragment()
+        loadFragment(homeFragment)
+
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frame_container, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
     override fun onBackPressed() {
