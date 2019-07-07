@@ -36,4 +36,11 @@ dependencies {
     // Anko Commons
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
     implementation 'de.hdodenhof:circleimageview:3.0.0'
+    //引入retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+    //引入okhttp
+    implementation 'com.squareup.okhttp3:okhttp:4.0.0'
+    //引入json
+    implementation 'com.google.code.gson:gson:2.8.5'
 }

@@ -8,12 +8,14 @@ import android.view.MenuItem
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import com.yolocc.eyepetizerunofficial.base.BaseActivity
 import com.yolocc.eyepetizerunofficial.util.obtainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import org.jetbrains.anko.toast
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -43,12 +45,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var rankingFragment: RankingFragment
     private lateinit var homeFragment: HomeFragment
     private var hideFragment: Fragment? = null
+    private var backTime: Long = 0
 
+    override fun getLayoutRes(): Int = R.layout.activity_main
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+    override fun init() {
         toolbar.title = getString(R.string.title_home)
         setSupportActionBar(toolbar)
         toolbar.setTitleTextAppearance(this, R.style.LobsterFontTextViewStyle)
@@ -65,9 +66,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         homeFragment = HomeFragment.newInstance()
         discoverFragment = DiscoverFragment.newInstance()
         rankingFragment = RankingFragment()
-        supportFragmentManager.beginTransaction().add(R.id.frame_container, rankingFragment, "ranking").hide(rankingFragment).commit()
-        supportFragmentManager.beginTransaction().add(R.id.frame_container, discoverFragment, "discover").hide(discoverFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.frame_container, rankingFragment, "ranking")
+            .hide(rankingFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.frame_container, discoverFragment, "discover")
+            .hide(discoverFragment).commit()
         supportFragmentManager.beginTransaction().add(R.id.frame_container, homeFragment, "home").commit()
+        hideFragment = homeFragment
     }
 
     private fun loadFragment(fragment: Fragment) {
@@ -82,7 +86,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            if ((System.currentTimeMillis() - backTime) > 2000) {
+                toast("再按一次退出")
+                backTime = System.currentTimeMillis()
+            } else {
+                super.onBackPressed()
+            }
         }
     }
 
