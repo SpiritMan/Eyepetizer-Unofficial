@@ -2,7 +2,9 @@ package com.yolocc.eyepetizerunofficial
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.uiThread
 import kotlin.concurrent.thread
 
 /**
@@ -18,6 +20,7 @@ class LandingActivity : AppCompatActivity() {
             Thread.sleep(2000)
             runOnUiThread {
                 startActivity<MainActivity>()
+                finish()
             }
         }
     }

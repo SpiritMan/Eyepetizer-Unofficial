@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import com.yolocc.eyepetizerunofficial.util.obtainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -19,16 +20,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.navigation_home -> {
                 toolbar.title = getString(R.string.title_home)
                 loadFragment(homeFragment)
+                hideFragment = homeFragment
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_discover -> {
                 toolbar.title = getString(R.string.title_discover)
                 loadFragment(discoverFragment)
+                hideFragment = discoverFragment
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_ranking -> {
                 toolbar.title = getString(R.string.title_ranking)
                 loadFragment(rankingFragment)
+                hideFragment = rankingFragment
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -38,6 +42,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var discoverFragment: DiscoverFragment
     private lateinit var rankingFragment: RankingFragment
     private lateinit var homeFragment: HomeFragment
+    private var hideFragment: Fragment? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,15 +65,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         homeFragment = HomeFragment.newInstance()
         discoverFragment = DiscoverFragment.newInstance()
         rankingFragment = RankingFragment()
-        loadFragment(homeFragment)
-
+        supportFragmentManager.beginTransaction().add(R.id.frame_container, rankingFragment, "ranking").hide(rankingFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.frame_container, discoverFragment, "discover").hide(discoverFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.frame_container, homeFragment, "home").commit()
     }
 
     private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frame_container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+        if (hideFragment != null) {
+            transaction.hide(hideFragment!!)
+        }
+        transaction.show(fragment).commit()
     }
 
     override fun onBackPressed() {
@@ -104,4 +111,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.closeDrawer(GravityCompat.START)
         return false
     }
+
+    fun obtainViewModel() = obtainViewModel(MainViewModel::class.java)
 }
