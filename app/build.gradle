@@ -43,4 +43,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.0.0'
     //引入json
     implementation 'com.google.code.gson:gson:2.8.5'
+    //引入Log拦截器，方便DEBUG模式输出log信息
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.0.0'
 }

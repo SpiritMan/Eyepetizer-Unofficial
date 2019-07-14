@@ -1,6 +1,8 @@
 package com.yolocc.eyepetizerunofficial.data
 
+import com.yolocc.eyepetizerunofficial.data.body.Category
+
 interface AppDataSource {
 
-    fun getCategory()
+    fun getCategory(): List<Category>
 }

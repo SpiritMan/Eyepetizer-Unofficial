@@ -32,6 +32,7 @@ class DiscoverFragment : Fragment() {
         Log.v(TAG, "onActivityCreated")
         super.onActivityCreated(savedInstanceState)
         viewModel = (activity as MainActivity).obtainViewModel()
+        viewModel.getCategory()
         // TODO: Use the ViewModel
     }
 
