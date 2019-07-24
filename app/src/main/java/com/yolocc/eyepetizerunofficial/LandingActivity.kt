@@ -1,12 +1,10 @@
 package com.yolocc.eyepetizerunofficial
 
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
 import com.yolocc.eyepetizerunofficial.base.BaseActivity
-import org.jetbrains.anko.doAsync
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.uiThread
-import kotlin.concurrent.thread
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -15,13 +13,12 @@ import kotlin.concurrent.thread
 class LandingActivity : BaseActivity() {
 
     override fun init() {
-        thread {
-            Thread.sleep(2000)
-            runOnUiThread {
-                startActivity<MainActivity>()
-                finish()
-            }
+        GlobalScope.launch {
+            delay(2000)
+            startActivity<MainActivity>()
+            finish()
         }
+
     }
 
     override fun getLayoutRes(): Int = R.layout.activity_landing
